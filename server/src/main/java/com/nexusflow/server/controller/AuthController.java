@@ -2,6 +2,7 @@ package com.nexusflow.server.controller;
 
 import com.nexusflow.server.dto.AuthDto;
 import com.nexusflow.server.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,13 +19,13 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthDto.AuthResponse> register(
-            @RequestBody AuthDto.RegisterRequest request) {
+            @Valid @RequestBody AuthDto.RegisterRequest request) {
         return ResponseEntity.ok(service.register(request));
     }
 
     @PostMapping("/login")
     public ResponseEntity<AuthDto.AuthResponse> authenticate(
-            @RequestBody AuthDto.LoginRequest request) {
+            @Valid @RequestBody AuthDto.LoginRequest request) {
         return ResponseEntity.ok(service.authenticate(request));
     }
 }

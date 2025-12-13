@@ -3,6 +3,7 @@ package com.nexusflow.server.controller;
 import com.nexusflow.server.dto.OrderDto;
 import com.nexusflow.server.entity.Order;
 import com.nexusflow.server.service.OrderService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -19,7 +20,7 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<Order> createOrder(
-            @RequestBody OrderDto.OrderRequest request,
+            @Valid @RequestBody OrderDto.OrderRequest request,
             Authentication authentication) {
         String username = authentication.getName();
         return ResponseEntity.ok(service.createOrder(request, username));

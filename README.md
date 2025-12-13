@@ -18,6 +18,23 @@ NexusFlow is a **senior-level enterprise order processing platform** engineered 
 - **Stateless Authentication**: Secured via **Spring Security** and **JWT (JSON Web Tokens)**.
 - **Role-Based Access Control (RBAC)**: Fine-grained permissions for `User` and `Admin` roles protecting sensitive endpoints.
 
+### 4. Comprehensive Input Validation
+- **Bean Validation**: All DTOs validated with `@Valid`, `@NotNull`, `@Min`, `@Max`, `@NotBlank` annotations.
+- **Detailed Error Messages**: User-friendly validation error responses with field-specific messages.
+
+### 5. Advanced Exception Handling
+- **Custom Exceptions**: `ResourceNotFoundException`, `InsufficientStockException` for business logic errors.
+- **Optimistic Locking Handler**: Graceful handling of concurrent modification conflicts.
+- **Structured Error Responses**: Consistent error format with timestamp, status, message, and validation errors.
+
+### 6. API Documentation (Swagger/OpenAPI)
+- **Interactive API Explorer**: Full REST API documentation with try-it-out functionality.
+- **JWT Integration**: Built-in authentication support in Swagger UI.
+
+### 7. Observability & Monitoring
+- **Spring Actuator**: Health checks, metrics, and application monitoring endpoints.
+- **Structured Logging**: SLF4J with contextual logging across all services.
+
 ## 🏗 System Architecture
 
 The system follows a microservices-inspired architecture managed via Docker Compose:
@@ -36,7 +53,7 @@ graph TD
     MQ -->|Consume Event| Listener["Async Worker (Internal)"]
 ```
 
-## � Tech Stack
+## 🛠 Tech Stack
 
 ### Backend
 - **Framework**: Spring Boot 3.2
@@ -70,7 +87,32 @@ docker-compose up --build
 **Access Points**:
 - **Frontend**: [http://localhost:5173](http://localhost:5173)
 - **Backend API**: [http://localhost:8080](http://localhost:8080)
+- **Swagger UI**: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+- **API Docs**: [http://localhost:8080/api-docs](http://localhost:8080/api-docs)
+- **Health Check**: [http://localhost:8080/actuator/health](http://localhost:8080/actuator/health)
+- **Metrics**: [http://localhost:8080/actuator/metrics](http://localhost:8080/actuator/metrics)
 - **RabbitMQ Dashboard**: [http://localhost:15672](http://localhost:15672) (User: `guest`, Pass: `guest`)
+
+### Local Development (Optional)
+- Backend: `cd server && mvn spring-boot:run`
+- Frontend: `cd client && npm install && npm run dev`
+- Tests: `cd server && mvn test`
+- Health check: `curl http://localhost:8080/actuator/health`
+
+### API Documentation (Swagger)
+1) Start services, then open [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+2) Click **Authorize** and paste your JWT (no `Bearer ` prefix needed)
+3) Try any endpoint directly from the UI
+
+### Validation & Errors
+- All request DTOs are validated (`@Valid`, `@NotNull`, `@Min`, `@NotBlank`)
+- Errors return a structured payload: `timestamp`, `status`, `error`, `message`, `path`, and `validationErrors`
+- Concurrency conflicts return HTTP 409 with guidance to retry
+
+### Monitoring
+- Health: `/actuator/health`
+- Metrics: `/actuator/metrics`
+- Prometheus scrape: `/actuator/prometheus`
 
 ### Default Roles
 - **User**: Register a new account via the UI.

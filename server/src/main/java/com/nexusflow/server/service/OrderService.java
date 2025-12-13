@@ -3,10 +3,13 @@ package com.nexusflow.server.service;
 import com.nexusflow.server.config.RabbitMQConfig;
 import com.nexusflow.server.dto.OrderDto;
 import com.nexusflow.server.entity.*;
+import com.nexusflow.server.exception.InsufficientStockException;
+import com.nexusflow.server.exception.ResourceNotFoundException;
 import com.nexusflow.server.repository.OrderRepository;
 import com.nexusflow.server.repository.ProductRepository;
 import com.nexusflow.server.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +18,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OrderService {
@@ -26,8 +30,10 @@ public class OrderService {
 
     @Transactional
     public Order createOrder(OrderDto.OrderRequest request, String username) {
+        log.info("Creating order for user: {}", username);
+        
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found: " + username));
 
         Order order = new Order();
         order.setUser(user);
@@ -44,10 +50,13 @@ public class OrderService {
                 throw new IllegalArgumentException("Product ID cannot be null");
             }
             Product product = productRepository.findById(productId)
-                    .orElseThrow(() -> new RuntimeException("Product not found"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Product not found with ID: " + productId));
 
             if (product.getQuantity() < itemRequest.getQuantity()) {
-                throw new RuntimeException("Insufficient stock for product: " + product.getName());
+                throw new InsufficientStockException(
+                    "Insufficient stock for product: " + product.getName() + 
+                    ". Available: " + product.getQuantity() + ", Requested: " + itemRequest.getQuantity()
+                );
             }
 
             // Optimistic locking handles the decrement safely
@@ -71,6 +80,8 @@ public class OrderService {
         order.setStatus(OrderStatus.CONFIRMED);
 
         Order savedOrder = orderRepository.save(order);
+        
+        log.info("Order created successfully with ID: {} for user: {}", savedOrder.getId(), username);
 
         // Async notification
         rabbitTemplate.convertAndSend(RabbitMQConfig.ORDER_PLACED_QUEUE, savedOrder.getId());
@@ -79,8 +90,10 @@ public class OrderService {
     }
 
     public List<Order> getUserOrders(String username) {
+        log.debug("Fetching orders for user: {}", username);
+        
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found: " + username));
         return orderRepository.findByUserId(user.getId());
     }
 }
