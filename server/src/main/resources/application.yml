@@ -18,6 +18,9 @@ spring:
     username: ${SPRING_RABBITMQ_USERNAME:guest}
     password: ${SPRING_RABBITMQ_PASSWORD:guest}
 
+seed:
+  enabled: ${SEED_ENABLED:true}
+
 jwt:
   secret: ${JWT_SECRET:9a4f2c8d3b7a1e6f45c8a0b3f2e1d5c9e8h7g6f5d4s3a2q1w0e9r8t7y6u5i4o3p2l1k0j}
   expiration: 86400000 # 24 hours
