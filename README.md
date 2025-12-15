@@ -73,6 +73,14 @@ graph TD
 
 ## 🚀 Getting Started
 
+### Quickstart (Docker Compose)
+- `docker-compose up --build`
+- Frontend: http://localhost:5173
+- API: http://localhost:8080
+- Swagger: http://localhost:8080/swagger-ui.html (use the token field to authorize)
+- Health/Metrics: http://localhost:8080/actuator/health, http://localhost:8080/actuator/metrics
+- RabbitMQ UI: http://localhost:15672 (guest/guest)
+
 ### Prerequisites
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) (Required)
 - Java 17+ & Node.js 18+ (Optional, for local non-Docker dev)
@@ -97,7 +105,27 @@ docker-compose up --build
 - Backend: `cd server && mvn spring-boot:run`
 - Frontend: `cd client && npm install && npm run dev`
 - Tests: `cd server && mvn test`
+- Frontend build check: `cd client && npm run build`
 - Health check: `curl http://localhost:8080/actuator/health`
+
+### Auth & Roles
+- Register or login at `/api/auth/register` or `/api/auth/login` (Swagger is the fastest way to try it).
+- In Swagger, paste the JWT in **Authorize** without the `Bearer` prefix.
+- Default role: `ROLE_CUSTOMER`; promote to admin manually or use the seeded admin credentials below.
+
+### Dev seed (auto)
+- Default admin (dev/demo): `admin` / `admin123` (seed is enabled when `SEED_ENABLED=true`, default).
+- Sample products are auto-created when the DB is empty.
+
+### Promote to Admin (quick SQL)
+```sql
+update users set role = 'ROLE_ADMIN' where username = 'your_username';
+```
+
+### CI (GitHub Actions)
+- Workflow: `.github/workflows/ci.yml`
+- Backend: `mvn verify` in `server`
+- Frontend: `npm ci && npm run build` in `client`
 
 > **Note:** Use JDK 17 for local Maven builds. Using newer JDKs (e.g., 21/23) can trigger `TypeTag :: UNKNOWN` javac errors with Lombok; Docker Compose already uses the correct JDK.
 
